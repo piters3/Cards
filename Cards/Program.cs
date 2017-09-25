@@ -40,52 +40,49 @@ namespace Cards
                 if (myCard.FigureNumber < enemyCard.FigureNumber)
                 {
                     Console.WriteLine("\nKarty zabiera komputer");
-                    //enemyCards.Enqueue(myCard);
-                    //myCards.Dequeue();
-                    //enemyCards.Enqueue(enemyCards.Dequeue());
                     TakeCards(myCards, enemyCards, myCard);
                 }
                 else if (myCard.FigureNumber == enemyCard.FigureNumber)
                 {
                     Console.WriteLine("\nWalka!!!");
-                    var enemySecondCard = enemyCards.ElementAt(1);
-                    var mySecondCard = myCards.ElementAt(1);
 
-                    Console.WriteLine($"Kumputer rzuca: {enemySecondCard.Figure} {enemySecondCard.Color}");
-                    Console.WriteLine($"Rzucasz: {mySecondCard.Figure} {mySecondCard.Color}");
-
-                    if (mySecondCard.FigureNumber < enemySecondCard.FigureNumber)
+                    try
                     {
-                        Console.WriteLine("\nKarty zabiera komputer");
-                        enemyCards.Enqueue(myCard);
-                        myCards.Dequeue();
-                        enemyCards.Enqueue(enemyCards.Dequeue());
+                        var enemySecondCard = enemyCards.ElementAt(1);
+                        var mySecondCard = myCards.ElementAt(1);
 
-                        enemyCards.Enqueue(mySecondCard);
-                        myCards.Dequeue();
-                        enemyCards.Enqueue(enemyCards.Dequeue());
+                        Console.WriteLine($"Kumputer rzuca: {enemySecondCard.Figure} {enemySecondCard.Color}");
+                        Console.WriteLine($"Rzucasz: {mySecondCard.Figure} {mySecondCard.Color}");
+
+                        if (mySecondCard.FigureNumber < enemySecondCard.FigureNumber)
+                        {
+                            Console.WriteLine("\nKarty zabiera komputer");
+                            TakeCards(myCards, enemyCards, myCard);
+                            TakeCards(myCards, enemyCards, mySecondCard);
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nZabierasz karty");
+                            TakeCards(enemyCards, myCards, enemyCard);
+                            TakeCards(enemyCards, myCards, enemySecondCard);
+                        }
                     }
-                    else
+                    catch (ArgumentOutOfRangeException)
                     {
-                        Console.WriteLine("\nZabierasz karty");
-                        myCards.Enqueue(enemyCard);
-                        enemyCards.Dequeue();
-                        myCards.Enqueue(myCards.Dequeue());
-
-                        myCards.Enqueue(enemySecondCard);
-                        enemyCards.Dequeue();
-                        myCards.Enqueue(myCards.Dequeue());
+                        if (myCards.Count < enemyCards.Count)
+                        {
+                            Console.WriteLine("Przegrałeś!!!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wygrałeś!!!");
+                        }
                     }
                 }
                 else
                 {
                     Console.WriteLine("\nZabierasz karty");
                     TakeCards(enemyCards, myCards, enemyCard);
-
-                    //myCards.Enqueue(enemyCard);
-                    //enemyCards.Dequeue();
-                    //myCards.Enqueue(myCards.Dequeue());
-
                 }
                 PrintStatistics(myCards, enemyCards);
             }
@@ -153,18 +150,18 @@ namespace Cards
             }
             Console.ReadKey();
             Console.Clear();
-        }   
+        }
 
         private static List<Card> InitializeDeck()
         {
             //string[] Colors = { "Spade", "Club", "Diamond", "Heart" };
             //string[] Figures = { "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace" };
 
-            //string[] Colors = { "Wino", "Żołądź", "Dzwonek", "Serce" };
-            //string[] Figures = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Walet", "Dama", "Król", "As" };
+            string[] Colors = { "Wino", "Żołądź", "Dzwonek", "Serce" };
+            string[] Figures = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Walet", "Dama", "Król", "As" };
 
-            string[] Colors = { "Wino", "Żołądź", "Dzwonek" };
-            string[] Figures = { "2", "3", "4", "5", };
+            //string[] Colors = { "Wino", "Żołądź", "Dzwonek" };
+            //string[] Figures = { "2", "2", "2", "2", };
 
             List<Card> deck = new List<Card>();
 
@@ -172,7 +169,7 @@ namespace Cards
             {
                 for (int j = 0; j < Figures.Length; j++)
                 {
-                    deck.Add(new Card { ColorNumber = i, FigureNumber = j+2, Color = Colors[i], Figure = Figures[j] });
+                    deck.Add(new Card { ColorNumber = i, FigureNumber = j + 2, Color = Colors[i], Figure = Figures[j] });
                 }
             }
 
